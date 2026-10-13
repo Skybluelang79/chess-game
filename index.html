@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chess</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div>
+    <h1>♞ Chess</h1>
+    <div id="board"></div>
+  </div>
+
+  <div class="side">
+    <div class="panel">
+      <div id="turn" class="turn white">
+        <span class="disc"></span>
+        <span id="turnText">White to move</span>
+      </div>
+      <div id="status">Select a piece to begin.</div>
+    </div>
+
+    <div class="panel">
+      <ul id="history"></ul>
+    </div>
+
+    <button id="restart">Restart Game</button>
+  </div>
+
+  <div id="promoModal" class="modal">
+    <div class="box">
+      <h2>Promote pawn to</h2>
+      <div class="promo" id="promoChoices"></div>
+    </div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+<script src="index.js"></script>
+</body>
+</html>

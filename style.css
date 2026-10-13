@@ -1,0 +1,222 @@
+:root {
+  --light: #f0d9b5;
+  --dark: #b58863;
+  --move: rgba(20, 85, 30, 0.5);
+  --last: rgba(255, 215, 0, 0.45);
+  --check: #e04b4b;
+  --bg: #262421;
+  --panel: #312e2b;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  padding: 24px;
+  background: var(--bg);
+  color: #e9e6e3;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+h1 { margin: 0 0 16px; font-size: 22px; letter-spacing: 1px; }
+
+#board {
+  width: min(88vw, 560px);
+  height: min(88vw, 560px);
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  border: 6px solid #1b1a18;
+  border-radius: 6px;
+  overflow: hidden;
+  user-select: none;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+
+.square {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: min(10vw, 56px);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.square.light { background: var(--light); }
+.square.dark { background: var(--dark); }
+
+.square.selected { box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.75); }
+
+.square.last::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--last);
+  z-index: 1;
+}
+
+.square .dot {
+  position: absolute;
+  width: 30%;
+  height: 30%;
+  border-radius: 50%;
+  background: var(--move);
+  z-index: 2;
+}
+
+.square .ring {
+  position: absolute;
+  inset: 4%;
+  border-radius: 50%;
+  border: 6px solid var(--move);
+  z-index: 2;
+}
+
+.square .piece {
+  position: relative;
+  z-index: 3;
+  pointer-events: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.square .piece.w { color: #ffffff; }
+.square .piece.b { color: #1c1c1c; }
+
+.square.in-check {
+  background: radial-gradient(circle, var(--check) 20%, transparent 72%),
+              var(--dark);
+}
+
+.square.light.in-check {
+  background: radial-gradient(circle, var(--check) 20%, transparent 72%),
+              var(--light);
+}
+
+.coord {
+  position: absolute;
+  font-size: 11px;
+  font-weight: 700;
+  z-index: 4;
+  opacity: 0.8;
+}
+.coord.file { right: 4px; bottom: 2px; }
+.coord.rank { left: 4px; top: 2px; }
+.square.light .coord { color: var(--dark); }
+.square.dark .coord { color: var(--light); }
+
+.side {
+  width: 280px;
+  max-width: 88vw;
+}
+
+.panel {
+  background: var(--panel);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+.turn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.turn .disc {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #888;
+}
+.turn.white .disc { background: #fff; }
+.turn.black .disc { background: #1c1c1c; }
+
+#status {
+  margin-top: 10px;
+  font-size: 15px;
+  min-height: 20px;
+  color: #c9c5c1;
+}
+
+#status.win { color: #7ee787; font-weight: 700; }
+
+#history {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 260px;
+  overflow-y: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+#history li {
+  display: grid;
+  grid-template-columns: 32px 1fr 1fr;
+  gap: 6px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 15px;
+}
+
+#history li:nth-child(odd) { background: rgba(255, 255, 255, 0.04); }
+#history .num { color: #8a8681; }
+#history .empty { color: #8a8681; padding: 8px; font-size: 14px; }
+
+button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background: #7fa650;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+button:hover { background: #8fbb5c; }
+button:active { transform: translateY(1px); }
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
+.modal.open { display: flex; }
+
+.modal .box {
+  background: var(--panel);
+  border-radius: 10px;
+  padding: 20px 24px;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+}
+.modal h2 { margin: 0 0 16px; font-size: 18px; }
+
+.promo {
+  display: flex;
+  gap: 8px;
+}
+.promo button {
+  width: 64px;
+  height: 64px;
+  font-size: 42px;
+  line-height: 1;
+  color: #1c1c1c;
+  background: var(--light);
+}
+.promo button:hover { background: #fff; }
